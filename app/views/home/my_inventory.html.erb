@@ -1,0 +1,36 @@
+<p class="text-center fs-1">My Inventory</p>
+<table class="table table-bordered table-primary"> 
+    <tr>
+        <th>No.</th>
+        <th>Picture</th>
+        <th>Name</th>
+        <th>Category</th>
+        <th>Stock</th>
+        <th>Price</th>
+        <th>Add Stock</th>
+        <th>Delete Item</th>
+    </tr>
+    <%i=1%>
+    <% for row in @rows%>
+    <tr>
+        <td><%=i%></td>
+        <td><%= image_tag rails_blob_path(row[4].picture,disposition: "attachment") ,class:"picture"%></td>
+        <td><%=row[0]%></td>
+        <td><%=row[1]%></td>
+        <td><%=row[2]%></td>
+        <td><%=row[3]%></td>
+        <%= form_with url: "/addStock/#{row[4].id}",data: {turbo: false} do |form| %>
+            <%= form.hidden_field :item, value: row[4].id%>
+            <td><%=form.submit "Add Stock",class: "btn btn-secondary"%></td>
+        <% end %>
+        <%= form_with url: '/home/deleteItem',data: {turbo: false} do |form| %>
+            <%= form.hidden_field :item, value: row[4].id%>
+            <td><%=form.submit :Delete,class: "btn btn-secondary"%></td>
+        <% end %>
+        <%i=i+1%>
+    </tr>
+    <%end%>
+</table>
+<%= form_with url: '/addItem',data: {turbo: false} do |form| %>
+    <%=form.submit "Add Item",class: "btn btn-secondary"%>
+<% end %>

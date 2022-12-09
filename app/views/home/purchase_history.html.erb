@@ -1,0 +1,27 @@
+<p class="text-center fs-1">Purchase History</p>
+<table class="table table-bordered table-primary"> 
+    <tr>
+        <th>No.</th>
+        <th >Picture</th>
+        <th>Name</th>
+        <th>Category</th>
+        <th>Seller</th>
+        <th>Price</th>
+        <th>Quantity</th>
+        <th>Purchase At</th>
+    </tr>
+    <%i=1%>
+    <% for row in @rows%>
+    <tr>
+        <td><%=i%></td>
+        <td><%= image_tag rails_blob_path(row[5].picture,disposition: "attachment") ,class:"picture"%></td>
+        <td><%=row[0]%></td>
+        <td><%=row[1]%></td>
+        <td><%=row[2]%></td>
+        <td><%=row[3]%></td>
+        <td><%=row[4]%></td>
+        <td><%=row[6]%></td>
+        <%i=i+1%>
+    </tr>
+    <%end%>
+</table>

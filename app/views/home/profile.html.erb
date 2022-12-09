@@ -1,0 +1,17 @@
+<p class="text-center fs-1">Profile</p>
+<table class="table table-bordered table-primary">
+  <tr >
+    <th >Email :</th>
+    <td ><%=@user.email%></td>
+  </tr>
+  <tr > 
+    <th >Name:</th>
+    <td ><%=@user.name%></td>
+  </tr>
+  <tr >
+    <th > Type :</th>
+    <td ><%=@type%></td>
+  </tr>
+</table>
+<%= link_to "Change Password", "/change_password",class: "btn btn-danger" %>
+<%= link_to "Back To Main", "/main", class: "btn btn-dark" %>

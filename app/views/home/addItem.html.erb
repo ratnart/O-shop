@@ -1,0 +1,18 @@
+<%= form_with url: '/home/verify_addItem',data: {turbo: false} do |form| %>
+    <%= form.label :item_name, "Item Name",class: "form-label"%>
+    <%=form.text_field :item_name, class: "form-control"%>
+
+    <%= form.label :item_category, "Item Category",class: "form-label"%>
+    <%=form.text_field :item_category, class: "form-control"%>
+
+    <%= form.label :price,"Price",class: "form-label"%>
+    <%=form.number_field :price, step: :any,class: "form-control"%>
+
+    <%= form.label :stock, "Stock",class: "form-label"%>
+    <%=form.number_field :stock,  class: "form-control"%>
+
+    <%= form.label :picture, "Product Picture",class: "form-label" %>
+    <%= form.file_field :picture ,class: "form-control"%>
+
+    <%=form.submit "Add Item",class: "btn btn-secondary mt-1"%>
+<% end %>

@@ -1,0 +1,11 @@
+<h1>Welcome to Shop</h1>
+<%= form_with url: '/home/check_user',data: {turbo: false} do |form| %>
+  <%= form.label :login, class: "form-label"%>
+  <%=form.email_field :login, class: "form-control"%>
+   <br/>
+  <%= form.label :password, class: "form-label"%>
+  <%=form.password_field :password , class: "form-control"%>
+ <br/>
+ 
+  <%=form.submit :OK,class: "btn btn-secondary"%>
+<% end %>

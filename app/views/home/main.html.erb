@@ -1,0 +1,16 @@
+<%= link_to "Go To Profile", "/profile",class: "btn btn-dark" %>
+<%if session[:user_type]!=1%>
+<%= link_to "Go To My Market", "/my_market",class: "btn btn-dark" %>
+<%= link_to "Go To Purchase History", "/purchase_history",class: "btn btn-dark" %>
+<%end%>
+<%if session[:user_type]!=2%>
+<%= link_to "Go To Sale History", "/sale_history",class: "btn btn-dark" %>
+<%= link_to "Go To Inventory", "/my_inventory",class: "btn btn-dark" %>
+<%= link_to "Go To Top Seller", "/profile",class: "btn btn-dark" %>
+<%end%>
+<%if session[:user_type]==0 %>
+<%= link_to "Go To User", "/profile",class: "btn btn-dark" %>
+<%= link_to "Go To Item", "/profile",class: "btn btn-dark" %>
+<%end%>
+<%= link_to "Log Out", "/home/logout",class: "btn btn-dark" %>
+

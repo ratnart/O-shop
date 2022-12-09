@@ -1,0 +1,8 @@
+<p class="text-center fs-1">My Inventory</p>
+<%="Item in Stock = #{@item.stock}"%>
+<%= form_with url: '/home/verify_add_stock',data: {turbo: false} do |form| %>
+    <%= form.hidden_field :item, value: @item.item_id%>
+    <%= form.label :addStock, "Add Stock",class: "form-label"%>
+    <%=form.number_field :addStock, class: "form-control addStock"%>
+    <%=form.submit :Add,class: "btn btn-secondary"%>
+<% end %>

@@ -1,0 +1,37 @@
+<p class="text-center fs-1">My Market</p>
+<%= form_with url: '/my_market',data: {turbo: false} do |form| %>
+    <%= form.label :category, "Search By Category",class: "form-label"%>
+    <%= form.select :category, @category,selected: @selected%>
+    <%=form.submit :Search,class: " border border-0 bg-dark text-white mb-1"%>
+<% end %>
+<table class="table table-bordered table-primary"> 
+    <tr>
+        <th>No.</th>
+        <th >Picture</th>
+        <th>Name</th>
+        <th>Stock</th>
+        <th>Seller</th>
+        <th>Price</th>
+        <th>Category</th>
+        <th>Select Quantity</th>
+        <th>Buy</th>
+    </tr>
+    <%i=1%>
+    <% for row in @rows%>
+    <tr>
+        <td><%=i%></td>
+        <td><%= image_tag rails_blob_path(row[5].picture,disposition: "attachment") ,class:"picture"%></td>
+        <td><%=row[0]%></td>
+        <td><%=row[1]%></td>
+        <td><%=row[2]%></td>
+        <td><%=row[3]%></td>
+        <td><%=row[4]%></td>
+        <%= form_with url: '/home/verify_buy',data: {turbo: false} do |form| %>
+            <%= form.hidden_field :market, value: row[6]%>
+            <td><%=form.number_field :quantity, class: "form-control"%></td>
+            <td><%=form.submit :Buy,class: "btn btn-secondary"%></td>
+        <% end %>
+        <%i=i+1%>
+    </tr>
+    <%end%>
+</table>
