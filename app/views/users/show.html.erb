@@ -1,10 +1,11 @@
+<%= link_to "Back to users", users_path ,class: "btn btn-dark mt-2"%>
 <p style="color: green"><%= notice %></p>
 
 <%= render @user %>
 
 <div>
-  <%= link_to "Edit this user", edit_user_path(@user) %> |
-  <%= link_to "Back to users", users_path %>
+  <%= link_to "Edit this user", edit_user_path(@user),class: "btn btn-primary mb-2" %><br/>
 
-  <%= button_to "Destroy this user", @user, method: :delete %>
+
+  <%= button_to "Destroy this user", @user, method: :delete ,class: "btn btn-danger"%>
 </div>

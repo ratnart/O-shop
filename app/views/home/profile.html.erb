@@ -1,4 +1,12 @@
+<%= link_to "Back To Main", "/main", class: "btn btn-dark mt-2" %>
 <p class="text-center fs-1">Profile</p>
+<% flash.each do |type,msg| %>
+        <p class= "text-danger">
+          <%if type!="from"&&type!="to"%>
+           <%= msg %>
+          <%end%>
+        </p>
+<% end %>
 <table class="table table-bordered table-primary">
   <tr >
     <th >Email :</th>
@@ -13,5 +21,4 @@
     <td ><%=@type%></td>
   </tr>
 </table>
-<%= link_to "Change Password", "/change_password",class: "btn btn-danger" %>
-<%= link_to "Back To Main", "/main", class: "btn btn-dark" %>
+<%= link_to "Change Password", "/change_password",class: "btn btn-danger " %>

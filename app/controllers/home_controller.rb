@@ -1,4 +1,7 @@
 class HomeController < ApplicationController
+  before_action :must_be_logged_in ,except: [:login,:check_user]
+  before_action :check_seller ,only: [:my_market,:purchase_history]
+  before_action :check_buyer ,only: [:sale_history,:my_inventory,:top_seller,:addItem]
   def profile
     @user=User.where(id:session[:user_id]).first
     case @user.user_type
@@ -31,7 +34,7 @@ class HomeController < ApplicationController
   def logout
     reset_session
     redirect_to '/login', notice: "Logout successfully"
-  endy_market
+  # endy_market
   end
   def check_user
     u=User.where(email: params[:login]).first
@@ -140,11 +143,13 @@ class HomeController < ApplicationController
   def verify_addItem
     item=Item.new()
     item.name=params[:item_name]
-    item.category=params[:item_category]
+    item.category=params[:item_category].downcase
     item.isdeleted=false
     item.enable=false
     item.save
-    item.picture.attach(params[:picture])
+    if(!params.blank?)
+      item.picture.attach(params[:picture])
+    end
     market=Market.new()
     market.user_id=session[:user_id]
     market.item_id=Item.last.id.to_i
@@ -168,6 +173,48 @@ class HomeController < ApplicationController
         row2.push(item)
         row2.push(inventory.created_at)
         @rows.push(row2)
+    end
+  end
+  def verify_top_seller 
+    if((!params[:from].blank?&&params[:to].blank?)||(!params[:to].blank?&&params[:from].blank?))
+      redirect_to '/top_seller',notice: "Please Enter From and To Day"
+    elsif(params[:from].to_date>params[:to].to_date)
+      redirect_to '/top_seller',notice: "Do Not Select To Day Before From Day"
+    else
+      redirect_to '/top_seller' ,from: params[:from],to: params[:to]
+    end
+  end
+  def top_seller
+    @sort=["Quantity","Income"]
+    @selected="Quantity"
+    if params[:sort]
+      @selected=params[:sort]
+    end
+    @from=""
+    @to=""
+    if flash[:from]
+      @from=flash[:from]
+    end
+    if flash[:to]
+      @to=flash[:to]
+    end
+    if(!params[:sort]||(params[:sort]&&params[:sort]=='Quantity'))
+      inv=Inventory.group(:seller_id).order('sum_qty desc').sum('qty').to_a
+      if(flash[:from]&&flash[:to]&&!flash[:from].blank?&&!flash[:to].blank?)
+        inv=Inventory.group(:seller_id).where('created_at BETWEEN ? AND ?', flash[:from].to_date.beginning_of_day, flash[:to].to_date.end_of_day).order('sum_qty desc').sum('qty').to_a
+      end
+    elsif(params[:sort]&&params[:sort]=='Income')
+      inv=Inventory.group(:seller_id).order('sum_qtyallprice desc').sum('qty*price').to_a
+      if(flash[:from]&&flash[:to]&&!flash[:from].blank?&&!flash[:to].blank?)
+        inv=Inventory.group(:seller_id).where('created_at BETWEEN ? AND ?', flash[:from].to_date.beginning_of_day, flash[:to].to_date.end_of_day).order('sum_qtyallprice desc').sum('qty*price').to_a
+      end
+    end
+    @rows=[]
+    for inventory in inv
+      row2=[]
+      row2.push(User.where(id:inventory[0]).first.name)
+      row2.push(inventory[1])
+      @rows.push(row2)
     end
   end
 end

@@ -1,4 +1,12 @@
+<%= link_to "Back To Main", "/main", class: "btn btn-dark mt-2" %>
 <p class="text-center fs-1">Sale History</p>
+<% flash.each do |type,msg| %>
+        <p class= "text-danger">
+          <%if type!="from"&&type!="to"%>
+           <%= msg %>
+          <%end%>
+        </p>
+<% end %>
 <table class="table table-bordered table-primary"> 
     <tr>
         <th>No.</th>

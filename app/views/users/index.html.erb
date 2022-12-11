@@ -1,3 +1,4 @@
+<%= link_to "Back To Main", "/main", class: "btn btn-dark mt-2" %>
 <p style="color: green"><%= notice %></p>
 
 <h1>Users</h1>
@@ -6,9 +7,9 @@
   <% @users.each do |user| %>
     <%= render user %>
     <p>
-      <%= link_to "Show this user", user %>
+      <%= link_to "Show this user", user,class: "btn btn-primary" %>
     </p>
   <% end %>
 </div>
 
-<%= link_to "New user", new_user_path %>
+<%= link_to "New user", new_user_path ,class: "btn btn-light"%>

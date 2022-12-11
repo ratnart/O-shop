@@ -38,7 +38,10 @@ class ItemsController < ApplicationController
   def update
     respond_to do |format|
       if @item.update(item_params)
-        @item.picture.attach(item_params[:picture])
+        if item_params[:picture].blank?
+        else
+          @item.picture.attach(item_params[:picture])
+        end
         format.html { redirect_to item_url(@item), notice: "Item was successfully updated." }
         format.json { render :show, status: :ok, location: @item }
       else

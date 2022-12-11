@@ -1,4 +1,12 @@
+<%= link_to "Back To Main", "/main", class: "btn btn-dark mt-2" %>
 <p class="text-center fs-1">My Inventory</p>
+<% flash.each do |type,msg| %>
+        <p class= "text-danger">
+          <%if type!="from"&&type!="to"%>
+           <%= msg %>
+          <%end%>
+        </p>
+<% end %>
 <table class="table table-bordered table-primary"> 
     <tr>
         <th>No.</th>
@@ -14,18 +22,22 @@
     <% for row in @rows%>
     <tr>
         <td><%=i%></td>
-        <td><%= image_tag rails_blob_path(row[4].picture,disposition: "attachment") ,class:"picture"%></td>
+         <%if row[4].picture.attached?%>
+            <td><%= image_tag rails_blob_path(row[4].picture,disposition: "attachment") ,class:"picture"%></td>
+        <%else%>
+            <td><%= image_tag "https://static.thenounproject.com/png/3674270-200.png" ,class:"picture"%></td>
+        <%end%>
         <td><%=row[0]%></td>
         <td><%=row[1]%></td>
         <td><%=row[2]%></td>
         <td><%=row[3]%></td>
         <%= form_with url: "/addStock/#{row[4].id}",data: {turbo: false} do |form| %>
             <%= form.hidden_field :item, value: row[4].id%>
-            <td><%=form.submit "Add Stock",class: "btn btn-secondary"%></td>
+            <td><%=form.submit "Add Stock",class: "btn btn-primary"%></td>
         <% end %>
         <%= form_with url: '/home/deleteItem',data: {turbo: false} do |form| %>
             <%= form.hidden_field :item, value: row[4].id%>
-            <td><%=form.submit :Delete,class: "btn btn-secondary"%></td>
+            <td><%=form.submit :Delete,class: "btn btn-danger"%></td>
         <% end %>
         <%i=i+1%>
     </tr>

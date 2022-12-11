@@ -12,26 +12,29 @@
   <% end %>
 
   <div>
-    <%= form.label :email, style: "display: block" %>
-    <%= form.text_field :email %>
+    <%= form.label :email, style: "display: block" ,class: "form-label" %>
+    <%= form.email_field :email ,class: "form-control"%>
   </div>
 
   <div>
-    <%= form.label :name, style: "display: block" %>
-    <%= form.text_field :name %>
+    <%= form.label :name, style: "display: block" ,class: "form-label"%>
+    <%= form.text_field :name,class: "form-control" %>
   </div>
 
+  <div class="d-none">
+    <%= form.label :password_digest, style: "display: block" ,class: "form-label"%>
+    <%= form.text_field :password_digest,class: "form-control" %>
+  </div>
+   <div>
+    <%= form.label :password, style: "display: block" ,class: "form-label"%>
+    <%= form.password_field :password ,class: "form-control"%>
+  </div>
   <div>
-    <%= form.label :password_digest, style: "display: block" %>
-    <%= form.text_field :password_digest %>
+    <%= form.label :user_type, style: "display: block" ,class: "form-label"%>
+    <%= form.number_field :user_type,class: "form-control" %>
   </div>
 
-  <div>
-    <%= form.label :user_type, style: "display: block" %>
-    <%= form.number_field :user_type %>
-  </div>
-
-  <div>
-    <%= form.submit %>
+  <div >
+    <%= form.submit class: "btn btn-secondary mt-2"%>
   </div>
 <% end %>

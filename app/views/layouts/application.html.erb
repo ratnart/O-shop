@@ -13,11 +13,6 @@
   </head>
 
   <body class="container">
-    <% flash.each do |type,msg| %>
-        <p class= "text-danger">
-          <%= msg %>
-        </p>
-    <% end %>
     <%= yield %>
   </body>
 </html>

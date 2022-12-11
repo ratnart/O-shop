@@ -1,14 +1,13 @@
+<%= link_to "Back To Main", "/main", class: "btn btn-dark mt-2" %>
 <p style="color: green"><%= notice %></p>
-
 <h1>Items</h1>
-
 <div id="items">
   <% @items.each do |item| %>
     <%= render item %>
     <p>
-      <%= link_to "Show this item", item %>
+      <%= link_to "Show this item", item,class: "btn btn-primary" %>
     </p>
   <% end %>
 </div>
 
-<%= link_to "New item", new_item_path %>
+<%= link_to "New item", new_item_path ,class: "btn btn-light"%>

@@ -1,0 +1,38 @@
+<%= link_to "Back To Main", "/main", class: "btn btn-dark mt-2" %>
+<p class="text-center fs-1">Top Seller</p>
+<% flash.each do |type,msg| %>
+        <p class= "text-danger">
+          <%if type!="from"&&type!="to"%>
+           <%= msg %>
+          <%end%>
+        </p>
+<% end %>
+<%= form_with url: '/home/verify_top_seller',data: {turbo: false} do |form| %>
+    <%= form.label :sort, "Sort By",class: "form-label"%>
+    <%= form.select :sort, @sort,selected: @selected%>
+     <%= form.label :from, "Selected Date From",class: "form-label"%>
+    <%= form.date_field :from ,value: @from ,max: Date.today%>
+    <%= form.label :to, "To",class: "form-label"%>
+    <%= form.date_field :to, value: @to ,max: Date.today%>
+    <%=form.submit :Search,class: " border border-0 bg-dark text-white mb-1"%>
+<% end %>
+<table class="table table-bordered table-primary"> 
+    <tr>
+        <th>No.</th>
+        <th>Name</th>
+        <%if(!params[:sort]||(params[:sort]&&params[:sort]=='Quantity'))%>
+        <th>Quantity</th>
+        <%elsif(params[:sort]&&params[:sort]=='Income')%>
+        <th>Income</th>
+        <%end%>
+    </tr>
+    <%i=1%>
+    <% for row in @rows%>
+    <tr>
+        <td><%=i%></td>
+        <td><%=row[0]%></td>
+        <td><%=row[1]%></td>
+        <%i=i+1%>
+    </tr>
+    <%end%>
+</table>

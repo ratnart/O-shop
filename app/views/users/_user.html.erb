@@ -1,22 +1,18 @@
 <div id="<%= dom_id user %>">
-  <p>
-    <strong>Email:</strong>
-    <%= user.email %>
-  </p>
+<table class="table table-primary">
+  <tr>
+    <td><strong>Email:</strong></td>
+     <td><%= user.email %></td>
+  </tr>
 
-  <p>
-    <strong>Name:</strong>
-    <%= user.name %>
-  </p>
+  <tr>
+     <td><strong>Name:</strong></td>
+    <td> <%= user.name %></td>
+  </tr>
 
-  <p>
-    <strong>Password digest:</strong>
-    <%= user.password_digest %>
-  </p>
-
-  <p>
-    <strong>User type:</strong>
-    <%= user.user_type %>
-  </p>
-
+  <tr>
+     <td><strong>User type:</strong></td>
+     <td><%= user.user_type %></td>
+  </tr>
+</table>
 </div>

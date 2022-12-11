@@ -1,4 +1,11 @@
 <h1>Welcome to Shop</h1>
+<% flash.each do |type,msg| %>
+        <p class= "text-danger">
+          <%if type!="from"&&type!="to"%>
+           <%= msg %>
+          <%end%>
+        </p>
+<% end %>
 <%= form_with url: '/home/check_user',data: {turbo: false} do |form| %>
   <%= form.label :login, class: "form-label"%>
   <%=form.email_field :login, class: "form-control"%>

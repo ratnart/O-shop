@@ -1,10 +1,11 @@
+<%= link_to "Back to items", items_path ,class: "btn btn-dark mt-2"%>
 <p style="color: green"><%= notice %></p>
 
 <%= render @item %>
 
 <div>
-  <%= link_to "Edit this item", edit_item_path(@item) %> |
-  <%= link_to "Back to items", items_path %>
+  <%= link_to "Edit this item", edit_item_path(@item),class: "btn btn-primary mb-2" %> 
+  
 
-  <%= button_to "Destroy this item", @item, method: :delete %>
+  <%= button_to "Destroy this item", @item, method: :delete,class: "btn btn-danger" %>
 </div>

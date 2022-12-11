@@ -1,17 +1,29 @@
 <div id="<%= dom_id item %>">
-  <p>
-    <strong>Name:</strong>
-    <%= item.name %>
-  </p>
+<table class="table table-primary">
+  <tr>
+    <td><strong>Name:</strong></td>
+    <td><%= item.name %></td>
+  </tr>
+  <tr>
+   <td> <strong>Picture:</strong></td>
+    <%if item.picture.attached?%>
+      <td><%= image_tag rails_blob_path(item.picture,disposition: "attachment") ,class:"picture"%></td>
+    <%else%>
+        <td><%= image_tag "https://static.thenounproject.com/png/3674270-200.png" ,class:"picture"%></td>
+    <%end%>
+  </tr>
+  <tr>
+    <td><strong>Category:</strong></td>
+   <td> <%= item.category %></td>
+  </tr>
 
-  <p>
-    <strong>Category:</strong>
-    <%= item.category %>
-  </p>
-
-  <p>
-    <strong>Enable:</strong>
-    <%= item.enable %>
-  </p>
-
+  <tr>
+   <td> <strong>Enable:</strong></td>
+    <td><%= item.enable %></td>
+ </tr>
+ <tr>
+   <td> <strong>IsDeleted:</strong></td>
+    <td><%= item.isdeleted %></td>
+ </tr>
+ </table>
 </div>

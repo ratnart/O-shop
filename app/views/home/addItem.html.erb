@@ -1,3 +1,10 @@
+<% flash.each do |type,msg| %>
+        <p class= "text-danger">
+          <%if type!="from"&&type!="to"%>
+           <%= msg %>
+          <%end%>
+        </p>
+<% end %>
 <%= form_with url: '/home/verify_addItem',data: {turbo: false} do |form| %>
     <%= form.label :item_name, "Item Name",class: "form-label"%>
     <%=form.text_field :item_name, class: "form-control"%>
@@ -14,5 +21,6 @@
     <%= form.label :picture, "Product Picture",class: "form-label" %>
     <%= form.file_field :picture ,class: "form-control"%>
 
-    <%=form.submit "Add Item",class: "btn btn-secondary mt-1"%>
+    <%=form.submit "Add Item",class: "btn btn-primary mt-2"%>
+    <%= link_to "Cancel", "/my_inventory",class: "btn btn-danger mt-2" %>
 <% end %>

@@ -1,3 +1,4 @@
+<%= link_to "Back To Main", "/main", class: "btn btn-dark mt-2" %>
 <p class="text-center fs-1">My Market</p>
 <%= form_with url: '/my_market',data: {turbo: false} do |form| %>
     <%= form.label :category, "Search By Category",class: "form-label"%>
@@ -20,7 +21,11 @@
     <% for row in @rows%>
     <tr>
         <td><%=i%></td>
-        <td><%= image_tag rails_blob_path(row[5].picture,disposition: "attachment") ,class:"picture"%></td>
+        <%if row[5].picture.attached?%>
+            <td><%= image_tag rails_blob_path(row[5].picture,disposition: "attachment") ,class:"picture"%></td>
+        <%else%>
+             <td><%= image_tag "https://static.thenounproject.com/png/3674270-200.png" ,class:"picture"%></td>
+        <%end%>
         <td><%=row[0]%></td>
         <td><%=row[1]%></td>
         <td><%=row[2]%></td>

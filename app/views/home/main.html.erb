@@ -1,16 +1,23 @@
-<%= link_to "Go To Profile", "/profile",class: "btn btn-dark" %>
+<% flash.each do |type,msg| %>
+        <p class= "text-danger">
+          <%if type!="from"&&type!="to"%>
+           <%= msg %>
+          <%end%>
+        </p>
+<% end %>
+<%= link_to "Go To Profile", "/profile",class: "btn btn-dark form-control mb-3 mt-2" %>
 <%if session[:user_type]!=1%>
-<%= link_to "Go To My Market", "/my_market",class: "btn btn-dark" %>
-<%= link_to "Go To Purchase History", "/purchase_history",class: "btn btn-dark" %>
+<%= link_to "Go To My Market", "/my_market",class: "btn btn-primary form-control mb-3" %>
+<%= link_to "Go To Purchase History", "/purchase_history",class: "btn btn-primary form-control mb-3" %>
 <%end%>
 <%if session[:user_type]!=2%>
-<%= link_to "Go To Sale History", "/sale_history",class: "btn btn-dark" %>
-<%= link_to "Go To Inventory", "/my_inventory",class: "btn btn-dark" %>
-<%= link_to "Go To Top Seller", "/profile",class: "btn btn-dark" %>
+<%= link_to "Go To Sale History", "/sale_history",class: "btn btn-secondary form-control mb-3" %>
+<%= link_to "Go To Inventory", "/my_inventory",class: "btn btn-secondary form-control mb-3" %>
+<%= link_to "Go To Top Seller", "/top_seller",class: "btn btn-secondary form-control mb-3" %>
 <%end%>
 <%if session[:user_type]==0 %>
-<%= link_to "Go To User", "/profile",class: "btn btn-dark" %>
-<%= link_to "Go To Item", "/profile",class: "btn btn-dark" %>
+<%= link_to "Go To User", users_path,class: "btn btn-dark form-control mb-3" %>
+<%= link_to "Go To Item", items_path,class: "btn btn-dark form-control mb-3" %>
 <%end%>
-<%= link_to "Log Out", "/home/logout",class: "btn btn-dark" %>
+<%= link_to "Log Out", "/home/logout",class: "btn btn-danger form-control mb-3" %>
 
