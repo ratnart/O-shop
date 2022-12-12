@@ -25,23 +25,33 @@ class MymarketTest< ApplicationSystemTestCase
         assert_selector "th", text: "Select Quantity"
         assert_selector "th", text: "Buy"
       end
-      test "buy" do
-        visit '/main'
-        click_on "Go To Market"
-        fill_in "quantity113629430", with: 1.to_i
-        click_on "Buy Item 1"
-        assert_selector "p", text: "Purchase Successfully "
-        click_on "Back To Main"
-        click_on "Go To Purchase History"
-        assert_selector "p", text: "Purchase History"
-      end
+      # test "buy" do
+      #   visit '/main'
+      #   click_on "Go To Market"
+      #   fill_in "quantity113629430", with: 1.to_i
+      #   click_on "Buy Item 1"
+      #   assert_selector "p", text: "Purchase Successfully "
+      #   click_on "Back To Main"
+      #   click_on "Go To Purchase History"
+      #   assert_selector "p", text: "Purchase History"
+      # end
     test "category" do
         visit '/main'
         click_on "Go To Market"
         select('x', from: 'category')
         click_on "Search"
-        assert_no_selector "td", text: "xz"
+        assert_no_selector "td", text: "ab"
         assert_no_selector "td", text: "z"
         assert_selector "td", text: "x"
+        select('z', from: 'category')
+        click_on "Search"
+        assert_no_selector "td", text: "ab"
+        assert_selector "td", text: "z"
+        assert_no_selector "td", text: "x"
+        select('ab', from: 'category')
+        click_on "Search"
+        assert_selector "td", text: "ab"
+        assert_no_selector "td", text: "z"
+        assert_no_selector "td", text: "x"
     end
 end

@@ -9,7 +9,7 @@ one:
 
 two:
   name: item2
-  category: xz
+  category: ab
   enable: true
   isdeleted: false
   lock_version: 0
