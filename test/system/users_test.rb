@@ -3,6 +3,10 @@ require "application_system_test_case"
 class UsersTest < ApplicationSystemTestCase
   setup do
     @user = users(:one)
+    visit '/login'
+    fill_in "email", with: @user.email
+    fill_in "password", with: "123"
+    click_on "OK"
   end
 
   test "visiting the index" do
@@ -16,12 +20,18 @@ class UsersTest < ApplicationSystemTestCase
 
     fill_in "Email", with: @user.email
     fill_in "Name", with: @user.name
-    fill_in "Password digest", with: @user.password_digest
+    fill_in "Password", with: "123"
     fill_in "User type", with: @user.user_type
     click_on "Create User"
 
     assert_text "User was successfully created"
     click_on "Back"
+
+    visit '/login'
+    fill_in "email", with: @user.email
+    fill_in "password", with: "123"
+    click_on "OK"
+    click_on "Go To Profile"
   end
 
   test "should update User" do
@@ -30,7 +40,7 @@ class UsersTest < ApplicationSystemTestCase
 
     fill_in "Email", with: @user.email
     fill_in "Name", with: @user.name
-    fill_in "Password digest", with: @user.password_digest
+    fill_in "Password", with: @user.password_digest
     fill_in "User type", with: @user.user_type
     click_on "Update User"
 

@@ -9,3 +9,8 @@ two:
   name: MyString
   category: MyString
   enable: false
+
+first:
+  name: MyString
+  category: MyString
+  enable: false

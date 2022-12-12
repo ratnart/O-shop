@@ -16,6 +16,7 @@
         <th>Stock</th>
         <th>Price</th>
         <th>Add Stock</th>
+        <th>Reduce Stock</th>
         <th>Delete Item</th>
     </tr>
     <%i=1%>
@@ -34,6 +35,10 @@
         <%= form_with url: "/addStock/#{row[4].id}",data: {turbo: false} do |form| %>
             <%= form.hidden_field :item, value: row[4].id%>
             <td><%=form.submit "Add Stock",class: "btn btn-primary"%></td>
+        <% end %>
+        <%= form_with url: "/reduceStock/#{row[4].id}",data: {turbo: false} do |form| %>
+            <%= form.hidden_field :item, value: row[4].id%>
+            <td><%=form.submit "Reduce Stock",class: "btn btn-warning"%></td>
         <% end %>
         <%= form_with url: '/home/deleteItem',data: {turbo: false} do |form| %>
             <%= form.hidden_field :item, value: row[4].id%>

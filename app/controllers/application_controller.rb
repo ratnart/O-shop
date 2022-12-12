@@ -25,4 +25,11 @@ class ApplicationController < ActionController::Base
                 return true
             end
         end
+        def check_admin
+            if session[:user_type]!=0
+                redirect_to '/main', notice: 'You do not have permission to access that page'
+            else  
+                return true
+            end
+        end
 end

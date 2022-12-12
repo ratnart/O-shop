@@ -3,6 +3,11 @@ require "application_system_test_case"
 class ItemsTest < ApplicationSystemTestCase
   setup do
     @item = items(:one)
+    @user = users(:one)
+    visit '/login'
+    fill_in "email", with: @user.email
+    fill_in "password", with: "123"
+    click_on "OK"
   end
 
   test "visiting the index" do
@@ -17,6 +22,7 @@ class ItemsTest < ApplicationSystemTestCase
     fill_in "Category", with: @item.category
     check "Enable" if @item.enable
     fill_in "Name", with: @item.name
+
     click_on "Create Item"
 
     assert_text "Item was successfully created"

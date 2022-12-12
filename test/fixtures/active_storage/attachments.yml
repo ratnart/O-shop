@@ -1,0 +1,4 @@
+first_picture_attachment:
+  name: picture
+  record: first (Item)
+  blob: first_picture_blob

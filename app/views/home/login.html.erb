@@ -7,8 +7,8 @@
         </p>
 <% end %>
 <%= form_with url: '/home/check_user',data: {turbo: false} do |form| %>
-  <%= form.label :login, class: "form-label"%>
-  <%=form.email_field :login, class: "form-control"%>
+  <%= form.label :email, class: "form-label"%>
+  <%=form.email_field :email, class: "form-control"%>
    <br/>
   <%= form.label :password, class: "form-label"%>
   <%=form.password_field :password , class: "form-control"%>

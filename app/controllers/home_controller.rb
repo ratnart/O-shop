@@ -1,7 +1,19 @@
 class HomeController < ApplicationController
-  before_action :must_be_logged_in ,except: [:login,:check_user]
+  before_action :must_be_logged_in ,except: [:login,:check_user,:register]
   before_action :check_seller ,only: [:my_market,:purchase_history]
   before_action :check_buyer ,only: [:sale_history,:my_inventory,:top_seller,:addItem]
+  def register
+    user=User.new()
+    user.email=params[:email]
+    user.password=params[:password]
+    user.user_type=0;
+    user.name="nart";
+    user.save
+    user=User.last()
+    session[:logged_in]=true
+    session[:user_id]=user.id
+    session[:user_type]=user.user_type
+  end
   def profile
     @user=User.where(id:session[:user_id]).first
     case @user.user_type
@@ -37,7 +49,7 @@ class HomeController < ApplicationController
   # endy_market
   end
   def check_user
-    u=User.where(email: params[:login]).first
+    u=User.where(email: params[:email]).first
     if u&&u.authenticate(params[:password])
       redirect_to '/main'
       session[:logged_in]=true
@@ -49,14 +61,16 @@ class HomeController < ApplicationController
   end
   def verify_buy
     market=Market.where(id:params[:market]).first
-    if(market.stock<params[:quantity].to_i||market.stock==0)
+    if(market.lock_version!=params[:lock_version].to_i)
+      redirect_to '/my_market', notice: "Fail to buy.Please try again"
+    elsif(market.stock<params[:quantity].to_i||market.stock==0)
       redirect_to '/my_market', notice: "Item out of stock"
     else
       market.stock-=params[:quantity].to_i
       market.save
       inventory=Inventory.new(user_id:session[:user_id],seller_id:market.user_id,item_id:market.item_id,price:market.price,qty:params[:quantity].to_i)
       inventory.save
-      redirect_to '/my_market', notice: "Purchase Succesfully"
+      redirect_to '/my_market', notice: "Purchase Successfully"
     end
 
   end
@@ -83,6 +97,7 @@ class HomeController < ApplicationController
           row2.push(item.category)
           row2.push(item)
           row2.push(info.id)
+          row2.push(info.lock_version)
        end
        if row2.size !=0
         @rows.push(row2)
@@ -127,9 +142,28 @@ class HomeController < ApplicationController
   end
   def verify_add_stock
     item=Market.where(item_id:params[:item].to_i).first
-    item.stock+=params[:addStock].to_i
-    item.save
-    redirect_to "/my_inventory", notice: "Add Stock Successfully"
+    if(params[:lock_version].to_i!=item.lock_version)
+      redirect_to "/my_inventory", notice: "Fail to add stock.Please try again"
+    else
+      item.stock+=params[:addStock].to_i
+      item.save
+      redirect_to "/my_inventory", notice: "Add Stock Successfully"
+    end
+  end
+  def reduceStock
+    @item=Market.where(item_id:params[:item].to_i).first
+  end
+  def verify_reduce_stock
+    item=Market.where(item_id:params[:item].to_i).first
+    if(params[:lock_version].to_i!=item.lock_version)
+      redirect_to "/my_inventory", notice: "Fail to reduce stock.Please try again"
+    elsif item.stock-params[:addStock].to_i<0
+      redirect_to "/my_inventory", notice: "Item stock cannot be negative"
+    else
+      item.stock-=params[:addStock].to_i
+      item.save
+      redirect_to "/my_inventory", notice: "Add Stock Successfully"
+    end
   end
   def deleteItem
     item=Item.where(id:params[:item].to_i).first

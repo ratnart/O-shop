@@ -1,5 +1,12 @@
 <%= link_to "Back To Main", "/main", class: "btn btn-dark mt-2" %>
 <p class="text-center fs-1">My Market</p>
+<% flash.each do |type,msg| %>
+        <p class= "text-danger">
+          <%if type!="from"&&type!="to"%>
+           <%= msg %>
+          <%end%>
+        </p>
+<% end %>
 <%= form_with url: '/my_market',data: {turbo: false} do |form| %>
     <%= form.label :category, "Search By Category",class: "form-label"%>
     <%= form.select :category, @category,selected: @selected%>
@@ -33,6 +40,7 @@
         <td><%=row[4]%></td>
         <%= form_with url: '/home/verify_buy',data: {turbo: false} do |form| %>
             <%= form.hidden_field :market, value: row[6]%>
+             <%= form.hidden_field :lock_version, value: row[7]%>
             <td><%=form.number_field :quantity, class: "form-control"%></td>
             <td><%=form.submit :Buy,class: "btn btn-secondary"%></td>
         <% end %>

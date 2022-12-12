@@ -1,6 +1,7 @@
 class ItemsController < ApplicationController
   before_action :set_item, only: %i[ show edit update destroy ]
-
+  before_action :must_be_logged_in 
+  before_action :check_admin
   # GET /items or /items.json
   def index
     @items = Item.all
@@ -37,7 +38,9 @@ class ItemsController < ApplicationController
   # PATCH/PUT /items/1 or /items/1.json
   def update
     respond_to do |format|
-      if @item.update(item_params)
+      if @item.lock_version!=item_params[:lock_version].to_i
+        format.html { redirect_to edit_item_url(@item), notice: "Fail to update item information.Please try again" }
+      elsif @item.update(item_params)
         if item_params[:picture].blank?
         else
           @item.picture.attach(item_params[:picture])
@@ -69,6 +72,6 @@ class ItemsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def item_params
-      params.require(:item).permit(:name, :category, :enable, :picture,:isdeleted)
+      params.require(:item).permit(:name, :category, :enable, :picture,:isdeleted,:lock_version)
     end
 end

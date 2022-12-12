@@ -15,17 +15,21 @@ Rails.application.routes.draw do
   get '/addItem',to: 'home#addItem'
   get '/sale_history',to:'home#sale_history'
   get '/top_seller',to:'home#top_seller'
+  get '/home/register'
   post '/home/verify_change_password'
  post '/home/check_user'
  post '/my_market',to: 'home#my_market'
  post '/home/verify_buy'
  post '/home/verify_add_stock'
+ post '/home/verify_reduce_stock'
  post '/home/deleteItem'
  post '/addStock/:id',to:'home#addStock'
+ post '/reduceStock/:id',to:'home#reduceStock'
  post '/addItem',to: 'home#addItem'
  post '/home/verify_addItem'
  post '/top_seller',to:'home#top_seller'
  post '/home/verify_top_seller'
+ post '/home/register'
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Defines the root path route ("/")
