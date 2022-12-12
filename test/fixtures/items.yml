@@ -1,16 +1,22 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
-  name: MyString
-  category: MyString
-  enable: false
+  name: item1
+  category: x
+  enable: true
+  isdeleted: false
+  lock_version: 0
 
 two:
-  name: MyString
-  category: MyString
-  enable: false
+  name: item2
+  category: xz
+  enable: true
+  isdeleted: false
+  lock_version: 0
 
 first:
-  name: MyString
-  category: MyString
-  enable: false
+  name: item3
+  category: z
+  enable: true
+  isdeleted: false
+  lock_version: 0

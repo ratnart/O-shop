@@ -1,5 +1,5 @@
 <%= link_to "Back To Main", "/main", class: "btn btn-dark mt-2" %>
-<p class="text-center fs-1">My Market</p>
+<p class="text-center fs-1">Market</p>
 <% flash.each do |type,msg| %>
         <p class= "text-danger">
           <%if type!="from"&&type!="to"%>
@@ -41,8 +41,8 @@
         <%= form_with url: '/home/verify_buy',data: {turbo: false} do |form| %>
             <%= form.hidden_field :market, value: row[6]%>
              <%= form.hidden_field :lock_version, value: row[7]%>
-            <td><%=form.number_field :quantity, class: "form-control"%></td>
-            <td><%=form.submit :Buy,class: "btn btn-secondary"%></td>
+            <td><%=form.number_field "quantity#{row[6]}", class: "form-control"%></td>
+            <td><%=form.submit "Buy Item #{i}",class: "btn btn-secondary",data: { disable_with: false }%></td>
         <% end %>
         <%i=i+1%>
     </tr>

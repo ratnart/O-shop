@@ -28,9 +28,9 @@ class HomeController < ApplicationController
   def verify_change_password
     @user=User.where(id:session[:user_id]).first
     if params["Re-enter password"]!=params[:Password] 
-      redirect_to "/change_password", notice: "Re-enter password doesn't match"
+      redirect_to "/change_password", notice: "Re-enter password does not match"
     elsif @user.authenticate(params[:Password])
-      redirect_to "/change_password", notice: "Don't use old password"
+      redirect_to "/change_password", notice: "Do not use old password"
     else 
       @user.password=params[:Password]
       @user.save
@@ -63,12 +63,12 @@ class HomeController < ApplicationController
     market=Market.where(id:params[:market]).first
     if(market.lock_version!=params[:lock_version].to_i)
       redirect_to '/my_market', notice: "Fail to buy.Please try again"
-    elsif(market.stock<params[:quantity].to_i||market.stock==0)
+    elsif(market.stock<params["quantity#{market.id}"].to_i||market.stock==0)
       redirect_to '/my_market', notice: "Item out of stock"
     else
-      market.stock-=params[:quantity].to_i
+      market.stock-=params["quantity#{market.id}"].to_i
       market.save
-      inventory=Inventory.new(user_id:session[:user_id],seller_id:market.user_id,item_id:market.item_id,price:market.price,qty:params[:quantity].to_i)
+      inventory=Inventory.new(user_id:session[:user_id],seller_id:market.user_id,item_id:market.item_id,price:market.price,qty:params["quantity#{market.id}"].to_i)
       inventory.save
       redirect_to '/my_market', notice: "Purchase Successfully"
     end
@@ -181,7 +181,7 @@ class HomeController < ApplicationController
     item.isdeleted=false
     item.enable=false
     item.save
-    if(!params.blank?)
+    if(!params[:picture].blank?)
       item.picture.attach(params[:picture])
     end
     market=Market.new()
@@ -190,7 +190,7 @@ class HomeController < ApplicationController
     market.price=params[:price].to_f
     market.stock=params[:stock]
     market.save
-    redirect_to "/my_inventory", notice: "Add Item Succesfully"
+    redirect_to "/my_inventory", notice: "Add Item Successfully"
   end
   def sale_history
     @db=Inventory.where(seller_id:session[:user_id])

@@ -4,6 +4,8 @@ class PleaseloginTest < ApplicationSystemTestCase
     test "visiting the main" do
         visit '/main'
         assert_text "You must login before access that page"
+        visit '/profile'
+        assert_text "You must login before access that page"
         visit '/my_market'
         assert_text "You must login before access that page"
         visit '/purchase_history'
@@ -13,6 +15,12 @@ class PleaseloginTest < ApplicationSystemTestCase
         visit '/my_inventory'
         assert_text "You must login before access that page"
         visit '/top_seller'
+        assert_text "You must login before access that page"
+        visit '/addItem'
+        assert_text "You must login before access that page"
+        visit '/addStock/1'
+        assert_text "You must login before access that page"
+        visit '/change_password'
         assert_text "You must login before access that page"
         visit items_url
         assert_text "You must login before access that page"

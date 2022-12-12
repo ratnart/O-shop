@@ -16,6 +16,8 @@ Rails.application.routes.draw do
   get '/sale_history',to:'home#sale_history'
   get '/top_seller',to:'home#top_seller'
   get '/home/register'
+  get '/home/verify_buy'
+  get '/addStock/:id',to:'home#addStock'
   post '/home/verify_change_password'
  post '/home/check_user'
  post '/my_market',to: 'home#my_market'
