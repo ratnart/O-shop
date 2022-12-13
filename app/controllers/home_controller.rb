@@ -61,7 +61,9 @@ class HomeController < ApplicationController
   end
   def verify_buy
     market=Market.where(id:params[:market].to_i).first
-    if(market.lock_version!=params[:lock_version].to_i)
+    if(params[:quantity].blank?)
+      redirect_to '/my_market', notice: "Please enter the number"
+    elsif(market.lock_version!=params[:lock_version].to_i)
       redirect_to '/my_market', notice: "Fail to buy.Please try again"
     elsif(market.stock<params["quantity"].to_i||market.stock==0)
       redirect_to '/my_market', notice: "Item out of stock"
@@ -185,22 +187,26 @@ class HomeController < ApplicationController
     
   end
   def verify_addItem
-    item=Item.new()
-    item.name=params[:item_name]
-    item.category=params[:item_category].downcase
-    item.isdeleted=false
-    item.enable=true
-    item.save
-    if(!params[:picture].blank?)
-      item.picture.attach(params[:picture])
+    if params[:item_name].blank?||params[:item_category].blank?||params[:price].blank?||params[:stock].blank?
+      redirect_to "/my_inventory", notice: "Please fill all information"
+    else  
+      item=Item.new()
+      item.name=params[:item_name]
+      item.category=params[:item_category].downcase
+      item.isdeleted=false
+      item.enable=true
+      item.save
+      if(!params[:picture].blank?)
+        item.picture.attach(params[:picture])
+      end
+      market=Market.new()
+      market.user_id=session[:user_id]
+      market.item_id=Item.last.id.to_i
+      market.price=params[:price].to_f
+      market.stock=params[:stock]
+      market.save
+      redirect_to "/my_inventory", notice: "Add Item Successfully"
     end
-    market=Market.new()
-    market.user_id=session[:user_id]
-    market.item_id=Item.last.id.to_i
-    market.price=params[:price].to_f
-    market.stock=params[:stock]
-    market.save
-    redirect_to "/my_inventory", notice: "Add Item Successfully"
   end
   def sale_history
     @db=Inventory.where(seller_id:session[:user_id])
