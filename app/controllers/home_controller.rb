@@ -62,7 +62,7 @@ class HomeController < ApplicationController
   def verify_buy
     market=Market.where(id:params[:market].to_i).first
     if(params[:quantity].blank?)
-      redirect_to '/my_market', notice: "Please enter the number"
+      redirect_to '/my_market', notice: "Please enter the amount"
     elsif(market.lock_version!=params[:lock_version].to_i)
       redirect_to '/my_market', notice: "Fail to buy.Please try again"
     elsif(market.stock<params["quantity"].to_i||market.stock==0)

@@ -64,6 +64,14 @@ class MyinventoryTest< ApplicationSystemTestCase
         assert_no_selector "td" ,text: @market3.price
         assert_no_selector "td", text: @market3.stock
       end
+      test "add item fail do not fill all information" do
+        click_on "Go To Inventory"
+        assert_selector "p", text: "My Inventory"
+        click_on "Add Item"
+        fill_in "item_name", with: "M"
+        click_on "Add Item"
+        assert_selector "p", text: "Please fill all information"
+      end
       test "add stock" do
         click_on "Go To Inventory"
         select(113629430,from:'market1')

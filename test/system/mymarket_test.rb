@@ -131,4 +131,10 @@ class MymarketTest< ApplicationSystemTestCase
         assert_selector "td", text: "5"
         
     end
+    test "check blank amount" do
+      click_on "Go To Market"
+      click_on "Buy"
+      click_on "Buy"
+      assert_selector "p", text: "Please enter the amount"
+    end
 end
