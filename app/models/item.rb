@@ -1,6 +1,6 @@
 class Item < ApplicationRecord
-    has_many :inventories,dependent: :destroy
-    has_one_attached :picture ,dependent: :destroy
-    has_many :markets,dependent: :destroy
+    has_many :inventories,dependent: :delete_all
+    has_one_attached :picture ,dependent: :delete_all
+    has_many :markets,dependent: :delete_all
     self.locking_column= :lock_version
 end

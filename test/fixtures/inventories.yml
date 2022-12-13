@@ -1,15 +1,22 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
-  user: one
+  user: three
   seller: one
   item: one
-  price: 1.5
-  qty: 1
+  price: 15.2
+  qty: 2
 
 two:
-  user: two
+  user: three
   seller: two
   item: two
-  price: 1.5
-  qty: 1
+  price: 10.5
+  qty: 5
+
+three:
+  user: three
+  seller: one
+  item: first
+  price: 25.2
+  qty: 2

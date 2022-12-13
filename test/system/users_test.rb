@@ -2,7 +2,7 @@ require "application_system_test_case"
 
 class UsersTest < ApplicationSystemTestCase
   setup do
-    @user = users(:one)
+    @user = users(:four)
     visit '/login'
     fill_in "email", with: @user.email
     fill_in "password", with: "123"

@@ -1,6 +1,6 @@
 class HomeController < ApplicationController
   before_action :must_be_logged_in ,except: [:login,:check_user,:register]
-  before_action :check_seller ,only: [:my_market,:purchase_history]
+  before_action :check_seller ,only: [:my_market,:purchase_history,:buy_item]
   before_action :check_buyer ,only: [:sale_history,:my_inventory,:top_seller,:addItem]
   def register
     user=User.new()
@@ -60,25 +60,30 @@ class HomeController < ApplicationController
     end
   end
   def verify_buy
-    market=Market.where(id:params[:market]).first
+    market=Market.where(id:params[:market].to_i).first
     if(market.lock_version!=params[:lock_version].to_i)
       redirect_to '/my_market', notice: "Fail to buy.Please try again"
-    elsif(market.stock<params["quantity#{market.id}"].to_i||market.stock==0)
+    elsif(market.stock<params["quantity"].to_i||market.stock==0)
       redirect_to '/my_market', notice: "Item out of stock"
     else
-      market.stock-=params["quantity#{market.id}"].to_i
+      market.stock-=params["quantity"].to_i
       market.save
-      inventory=Inventory.new(user_id:session[:user_id],seller_id:market.user_id,item_id:market.item_id,price:market.price,qty:params["quantity#{market.id}"].to_i)
+      inventory=Inventory.new(user_id:session[:user_id],seller_id:market.user_id,item_id:market.item_id,price:market.price,qty:params["quantity"].to_i)
       inventory.save
       redirect_to '/my_market', notice: "Purchase Successfully"
     end
-
+  end
+  def buy_item
+    market=Market.where(id:params[:market].to_i).first
+    @lock_version=market.lock_version
+    @stock=market.stock
   end
   def my_market 
     @db=Market.all
     @rows=[]
     @category=["All"]
     @selected="All"
+    @choose=[]
     if params[:category]
       @selected=params[:category]
     end
@@ -98,6 +103,7 @@ class HomeController < ApplicationController
           row2.push(item)
           row2.push(info.id)
           row2.push(info.lock_version)
+          @choose.push(info.id)
        end
        if row2.size !=0
         @rows.push(row2)
@@ -124,6 +130,7 @@ class HomeController < ApplicationController
   def my_inventory
     @db=Market.where(user_id:session[:user_id])
     @rows=[]
+    @choose=[]
     for market in @db
        item=Item.where(id:market.item_id).first
         if(!item.isdeleted)
@@ -133,12 +140,14 @@ class HomeController < ApplicationController
           row2.push(market.stock)
           row2.push(market.price)
           row2.push(item)
+          row2.push(market.id)
           @rows.push(row2)
+          @choose.push(market.id)
         end
     end
   end
   def addStock
-    @item=Market.where(item_id:params[:item].to_i).first
+    @item=Market.where(id:params[:market1]).first
   end
   def verify_add_stock
     item=Market.where(item_id:params[:item].to_i).first
@@ -151,22 +160,23 @@ class HomeController < ApplicationController
     end
   end
   def reduceStock
-    @item=Market.where(item_id:params[:item].to_i).first
+    @item=Market.where(id:params[:market2]).first
   end
   def verify_reduce_stock
     item=Market.where(item_id:params[:item].to_i).first
     if(params[:lock_version].to_i!=item.lock_version)
       redirect_to "/my_inventory", notice: "Fail to reduce stock.Please try again"
-    elsif item.stock-params[:addStock].to_i<0
+    elsif item.stock-params[:reduceStock].to_i<0
       redirect_to "/my_inventory", notice: "Item stock cannot be negative"
     else
-      item.stock-=params[:addStock].to_i
+      item.stock-=params[:reduceStock].to_i
       item.save
-      redirect_to "/my_inventory", notice: "Add Stock Successfully"
+      redirect_to "/my_inventory", notice: "Reduce Stock Successfully"
     end
   end
   def deleteItem
-    item=Item.where(id:params[:item].to_i).first
+    market=Market.where(id:params[:market3]).first
+    item=Item.where(id:market.item_id).first
     item.isdeleted=true
     item.save
     redirect_to "/my_inventory", notice: "Delete Succesfully"
@@ -179,7 +189,7 @@ class HomeController < ApplicationController
     item.name=params[:item_name]
     item.category=params[:item_category].downcase
     item.isdeleted=false
-    item.enable=false
+    item.enable=true
     item.save
     if(!params[:picture].blank?)
       item.picture.attach(params[:picture])
@@ -211,18 +221,18 @@ class HomeController < ApplicationController
   end
   def verify_top_seller 
     if((!params[:from].blank?&&params[:to].blank?)||(!params[:to].blank?&&params[:from].blank?))
-      redirect_to '/top_seller',notice: "Please Enter From and To Day"
-    elsif(params[:from].to_date>params[:to].to_date)
-      redirect_to '/top_seller',notice: "Do Not Select To Day Before From Day"
+      redirect_to '/top_seller',notice: "Please Enter From and To Day",sort:params[:sort]
+    elsif(!params[:from].blank?&&!params[:to].blank?&&params[:from].to_date>params[:to].to_date)
+      redirect_to '/top_seller',notice: "Do Not Select To Day Before From Day",sort:params[:sort]
     else
-      redirect_to '/top_seller' ,from: params[:from],to: params[:to]
+      redirect_to '/top_seller' ,from: params[:from],to: params[:to],sort: params[:sort]
     end
   end
   def top_seller
     @sort=["Quantity","Income"]
     @selected="Quantity"
-    if params[:sort]
-      @selected=params[:sort]
+    if flash[:sort]
+      @selected=flash[:sort]
     end
     @from=""
     @to=""
@@ -232,14 +242,14 @@ class HomeController < ApplicationController
     if flash[:to]
       @to=flash[:to]
     end
-    if(!params[:sort]||(params[:sort]&&params[:sort]=='Quantity'))
+    if(!flash[:sort]||(flash[:sort]&&flash[:sort]=='Quantity'))
       inv=Inventory.group(:seller_id).order('sum_qty desc').sum('qty').to_a
-      if(flash[:from]&&flash[:to]&&!flash[:from].blank?&&!flash[:to].blank?)
+      if(!flash[:from].blank?&&!flash[:to].blank?)
         inv=Inventory.group(:seller_id).where('created_at BETWEEN ? AND ?', flash[:from].to_date.beginning_of_day, flash[:to].to_date.end_of_day).order('sum_qty desc').sum('qty').to_a
       end
-    elsif(params[:sort]&&params[:sort]=='Income')
+    elsif(flash[:sort]&&flash[:sort]=='Income')
       inv=Inventory.group(:seller_id).order('sum_qtyallprice desc').sum('qty*price').to_a
-      if(flash[:from]&&flash[:to]&&!flash[:from].blank?&&!flash[:to].blank?)
+      if(!flash[:from].blank?&&!flash[:to].blank?)
         inv=Inventory.group(:seller_id).where('created_at BETWEEN ? AND ?', flash[:from].to_date.beginning_of_day, flash[:to].to_date.end_of_day).order('sum_qtyallprice desc').sum('qty*price').to_a
       end
     end

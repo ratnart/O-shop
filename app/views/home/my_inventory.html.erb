@@ -7,6 +7,26 @@
           <%end%>
         </p>
 <% end %>
+<%if @choose.size!=0%>
+    <%= form_with url: "/addStock",data: {turbo: false} do |form| %>
+        <%= form.label :market1, "Choose Add Product",class: "form-label"%>
+        <%= form.select :market1, @choose%>
+        <%=form.submit "Add Stock",class: "btn btn-primary mb-2"%>
+    <% end %>
+    <%= form_with url: "/reduceStock",data: {turbo: false} do |form| %>
+        <%= form.label :market2, "Choose Reduce Product",class: "form-label"%>
+        <%= form.select :market2, @choose%>
+        <%=form.submit "Reduce Stock ",class: "btn btn-warning mb-2"%>
+    <% end %>
+    <%= form_with url: '/home/deleteItem',data: {turbo: false} do |form| %>
+        <%= form.label :market3, "Choose Delete Product",class: "form-label"%>
+        <%= form.select :market3, @choose%>
+        <%=form.submit "Delete",class: "btn btn-danger mb-2"%>
+<% end %>
+<%end%>
+<%= form_with url: '/addItem',data: {turbo: false} do |form| %>
+    <%=form.submit "Add Item",class: "btn btn-secondary mb-2"%>
+<% end %>
 <table class="table table-bordered table-primary"> 
     <tr>
         <th>No.</th>
@@ -15,14 +35,11 @@
         <th>Category</th>
         <th>Stock</th>
         <th>Price</th>
-        <th>Add Stock</th>
-        <th>Reduce Stock</th>
-        <th>Delete Item</th>
     </tr>
     <%i=1%>
     <% for row in @rows%>
     <tr>
-        <td><%=i%></td>
+        <td><%=row[5]%></td>
          <%if row[4].picture.attached?%>
             <td><%= image_tag rails_blob_path(row[4].picture,disposition: "attachment") ,class:"picture"%></td>
         <%else%>
@@ -32,22 +49,7 @@
         <td><%=row[1]%></td>
         <td><%=row[2]%></td>
         <td><%=row[3]%></td>
-        <%= form_with url: "/addStock/#{row[4].id}",data: {turbo: false} do |form| %>
-            <%= form.hidden_field :item, value: row[4].id%>
-            <td><%=form.submit "Add Stock",class: "btn btn-primary"%></td>
-        <% end %>
-        <%= form_with url: "/reduceStock/#{row[4].id}",data: {turbo: false} do |form| %>
-            <%= form.hidden_field :item, value: row[4].id%>
-            <td><%=form.submit "Reduce Stock",class: "btn btn-warning"%></td>
-        <% end %>
-        <%= form_with url: '/home/deleteItem',data: {turbo: false} do |form| %>
-            <%= form.hidden_field :item, value: row[4].id%>
-            <td><%=form.submit :Delete,class: "btn btn-danger"%></td>
-        <% end %>
         <%i=i+1%>
     </tr>
     <%end%>
 </table>
-<%= form_with url: '/addItem',data: {turbo: false} do |form| %>
-    <%=form.submit "Add Item",class: "btn btn-secondary"%>
-<% end %>

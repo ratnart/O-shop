@@ -2,14 +2,40 @@ require "application_system_test_case"
 
 class MymarketTest< ApplicationSystemTestCase
     setup do
-        @item = items(:one)
-        @market=markets(:one)
+        @item1 = items(:one)
+        @market1=markets(:one)
+        @market2=markets(:two)
+        @market3=markets(:three)
         @seller=users(:two)
         @buyer=users(:three)
         visit '/login'
         fill_in "email", with: @buyer.email
         fill_in "password", with: "123"
         click_on "OK"
+      end
+      test "show all" do
+        visit '/main'
+        click_on "Go To Market"
+        assert_selector "td" ,text: @market1.id
+        assert_selector "td" ,text: @market1.item.name
+        assert_selector "td" ,text: @market1.item.category
+        assert_selector "td" ,text: @market1.user.name
+        assert_selector "td" ,text: @market1.price
+        assert_selector "td", text: @market1.stock
+
+        assert_selector "td" ,text: @market2.id
+        assert_selector "td" ,text: @market2.item.name
+        assert_selector "td" ,text: @market2.item.category
+        assert_selector "td" ,text: @market2.user.name
+        assert_selector "td" ,text: @market2.price
+        assert_selector "td", text: @market2.stock
+
+        assert_selector "td" ,text: @market3.id
+        assert_selector "td" ,text: @market3.item.name
+        assert_selector "td" ,text: @market3.item.category
+        assert_selector "td" ,text: @market3.user.name
+        assert_selector "td" ,text: @market3.price
+        assert_selector "td", text: @market3.stock
       end
       test "check column" do
         visit '/main'
@@ -22,19 +48,36 @@ class MymarketTest< ApplicationSystemTestCase
         assert_selector "th", text: "Seller"
         assert_selector "th", text: "Price"
         assert_selector "th", text: "Category"
-        assert_selector "th", text: "Select Quantity"
-        assert_selector "th", text: "Buy"
       end
-      # test "buy" do
-      #   visit '/main'
-      #   click_on "Go To Market"
-      #   fill_in "quantity113629430", with: 1.to_i
-      #   click_on "Buy Item 1"
-      #   assert_selector "p", text: "Purchase Successfully "
-      #   click_on "Back To Main"
-      #   click_on "Go To Purchase History"
-      #   assert_selector "p", text: "Purchase History"
-      # end
+      test "buy and purchase history" do
+        visit '/main'
+        click_on "Go To Market"
+        select(113629430,from:'market')
+        click_on "Buy"
+        assert_selector "p", text: "Buy Item"
+        fill_in "quantity", with: 1
+        click_on "Buy"
+        assert_selector "p", text: "Purchase Successfully"
+        click_on "Back To Main"
+        click_on "Go To Purchase History"
+        assert_selector "p", text: "Purchase History"
+        assert_selector "td" ,text: "1"
+        assert_selector "td" ,text: "item3"
+        assert_selector "td" ,text: "z"
+        assert_selector "td" ,text: "seller"
+        assert_selector "td" ,text: "6.0"
+        assert_selector "td", text: "1"
+      end
+      test "buy failed" do
+        visit '/main'
+        click_on "Go To Market"
+        select(113629430,from:'market')
+        click_on "Buy"
+        assert_selector "p", text: "Buy Item"
+        fill_in "quantity", with: 20
+        click_on "Buy"
+        assert_selector "p", text: "Item out of stock"
+      end
     test "category" do
         visit '/main'
         click_on "Go To Market"
@@ -53,5 +96,39 @@ class MymarketTest< ApplicationSystemTestCase
         assert_selector "td", text: "ab"
         assert_no_selector "td", text: "z"
         assert_no_selector "td", text: "x"
+    end
+    test "sale history" do
+      visit '/main'
+        click_on "Go To Market"
+        select(113629430,from:'market')
+        click_on "Buy"
+        assert_selector "p", text: "Buy Item"
+        fill_in "quantity", with: 1
+        click_on "Buy"
+        assert_selector "p", text: "Purchase Successfully"
+        click_on "Back To Main"
+
+        click_on "Log Out"
+
+        fill_in "email", with: @seller.email
+        fill_in "password", with: "123"
+        click_on "OK"
+
+        click_on "Go To Sale History"
+
+        assert_selector "p", text: "Sale History"
+        assert_selector "td" ,text: "item3"
+        assert_selector "td" ,text: "z"
+        assert_selector "td" ,text: "buyer"
+        assert_selector "td" ,text: "6.0"
+        assert_selector "td", text: "1"
+
+        assert_selector "p", text: "Sale History"
+        assert_selector "td" ,text: "item2"
+        assert_selector "td" ,text: "ab"
+        assert_selector "td" ,text: "buyer"
+        assert_selector "td" ,text: "10.5"
+        assert_selector "td", text: "5"
+        
     end
 end

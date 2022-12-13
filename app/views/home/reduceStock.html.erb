@@ -1,4 +1,4 @@
-<p class="text-center fs-1">My Inventory</p>
+<p class="text-center fs-1">Reduce Stock</p>
 <% flash.each do |type,msg| %>
         <p class= "text-danger">
           <%if type!="from"&&type!="to"%>
@@ -10,8 +10,8 @@
 <%= form_with url: '/home/verify_reduce_stock',data: {turbo: false} do |form| %>
     <%=form.hidden_field :lock_version, value:@item.lock_version%>
     <%= form.hidden_field :item, value: @item.item_id%>
-    <%= form.label :addStock, "Reduce Stock",class: "form-label"%>
-    <%=form.number_field :addStock, class: "form-control addStock"%>
+    <%= form.label :reduceStock, "Reduce Stock",class: "form-label"%>
+    <%=form.number_field :reduceStock, class: "form-control addStock"%>
     <%=form.submit :Reduce,class: "btn btn-secondary"%>
     <%= link_to "Cancel", "/my_inventory",class: "btn btn-danger" %>
 <% end %>

@@ -2,7 +2,7 @@
 <p class="text-center fs-1">Top Seller</p>
 <% flash.each do |type,msg| %>
         <p class= "text-danger">
-          <%if type!="from"&&type!="to"%>
+          <%if type!="from"&&type!="to"&&type!="sort"%>
            <%= msg %>
           <%end%>
         </p>
@@ -10,19 +10,19 @@
 <%= form_with url: '/home/verify_top_seller',data: {turbo: false} do |form| %>
     <%= form.label :sort, "Sort By",class: "form-label"%>
     <%= form.select :sort, @sort,selected: @selected%>
-     <%= form.label :from, "Selected Date From",class: "form-label"%>
+     <%= form.label :from, "Select Date From",class: "form-label"%>
     <%= form.date_field :from ,value: @from ,max: Date.today%>
     <%= form.label :to, "To",class: "form-label"%>
     <%= form.date_field :to, value: @to ,max: Date.today%>
-    <%=form.submit :Search,class: " border border-0 bg-dark text-white mb-1"%>
+    <%=form.submit :Filter,class: " border border-0 bg-dark text-white mb-1"%>
 <% end %>
 <table class="table table-bordered table-primary"> 
     <tr>
         <th>No.</th>
         <th>Name</th>
-        <%if(!params[:sort]||(params[:sort]&&params[:sort]=='Quantity'))%>
+        <%if(!flash[:sort]||(flash[:sort]&&flash[:sort]=='Quantity'))%>
         <th>Quantity</th>
-        <%elsif(params[:sort]&&params[:sort]=='Income')%>
+        <%elsif(flash[:sort]&&flash[:sort]=='Income')%>
         <th>Income</th>
         <%end%>
     </tr>
@@ -30,8 +30,8 @@
     <% for row in @rows%>
     <tr>
         <td><%=i%></td>
-        <td><%=row[0]%></td>
-        <td><%=row[1]%></td>
+        <%= content_tag( :td, "#{row[0]}",class: "name#{i}") %>
+        <%= content_tag( :td, "#{row[1]}",class: "qp#{i}") %>
         <%i=i+1%>
     </tr>
     <%end%>

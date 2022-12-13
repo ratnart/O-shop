@@ -1,5 +1,5 @@
 class ApplicationController < ActionController::Base
-    add_flash_types :from, :to
+    add_flash_types :from, :to,:sort
     private
 		def is_login?
 			return	session[:logged_in]==true

@@ -1,0 +1,9 @@
+<p class="text-center fs-1">Buy Item</p>
+<%="Currently in stock = #{@stock}"%>
+<%= form_with url: "/verify_buy",data: {turbo: false} do |form| %>
+    <%= form.hidden_field :market, value: params[:market]%>
+    <%= form.hidden_field :lock_version, value: @lock_version%>
+    <%=form.number_field "quantity", class: "form-control mb-2" %>
+    <%=form.submit "Buy",class: "btn btn-secondary"%>
+<% end %>
+<%= link_to "Cancel", "/my_market", class: "btn btn-dark mt-2" %>

@@ -12,6 +12,13 @@
     <%= form.select :category, @category,selected: @selected%>
     <%=form.submit :Search,class: " border border-0 bg-dark text-white mb-1"%>
 <% end %>
+<%if @choose.size!=0%>
+    <%= form_with url: "/buy_item",data: {turbo: false} do |form| %>
+        <%= form.label :market, "Choose Product",class: "form-label"%>
+        <%= form.select :market, @choose%>
+        <%=form.button "Buy",class: "btn btn-secondary mb-2"%>
+    <% end %>
+<%end%>
 <table class="table table-bordered table-primary"> 
     <tr>
         <th>No.</th>
@@ -21,13 +28,11 @@
         <th>Seller</th>
         <th>Price</th>
         <th>Category</th>
-        <th>Select Quantity</th>
-        <th>Buy</th>
     </tr>
     <%i=1%>
     <% for row in @rows%>
     <tr>
-        <td><%=i%></td>
+        <td><%=row[6]%></td>
         <%if row[5].picture.attached?%>
             <td><%= image_tag rails_blob_path(row[5].picture,disposition: "attachment") ,class:"picture"%></td>
         <%else%>
@@ -38,12 +43,6 @@
         <td><%=row[2]%></td>
         <td><%=row[3]%></td>
         <td><%=row[4]%></td>
-        <%= form_with url: '/home/verify_buy',data: {turbo: false} do |form| %>
-            <%= form.hidden_field :market, value: row[6]%>
-             <%= form.hidden_field :lock_version, value: row[7]%>
-            <td><%=form.number_field "quantity#{row[6]}", class: "form-control"%></td>
-            <td><%=form.submit "Buy Item #{i}",class: "btn btn-secondary",data: { disable_with: false }%></td>
-        <% end %>
         <%i=i+1%>
     </tr>
     <%end%>

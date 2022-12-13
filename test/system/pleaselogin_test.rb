@@ -18,7 +18,9 @@ class PleaseloginTest < ApplicationSystemTestCase
         assert_text "You must login before access that page"
         visit '/addItem'
         assert_text "You must login before access that page"
-        visit '/addStock/1'
+        visit '/addStock'
+        assert_text "You must login before access that page"
+        visit '/reduceStock'
         assert_text "You must login before access that page"
         visit '/change_password'
         assert_text "You must login before access that page"
