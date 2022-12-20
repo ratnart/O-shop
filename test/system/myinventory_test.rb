@@ -31,6 +31,8 @@ class MyinventoryTest< ApplicationSystemTestCase
         fill_in "item_category",with: "robot"
         fill_in "price" ,with: 25.5
         fill_in "stock" ,with: 20
+        attach_file "picture", file_fixture("second.jpg")
+       
         click_on "Add Item"
         assert_selector "p", text: "Add Item Successfully"
         
@@ -38,7 +40,7 @@ class MyinventoryTest< ApplicationSystemTestCase
         assert_selector "td" ,text: "robot"
         assert_selector "td" ,text: "25.5"
         assert_selector "td", text: "20"
-
+        assert_selector "img[src*='second.jpg']"
         click_on "Back To Main"
         click_on "Log Out"
         
@@ -52,12 +54,27 @@ class MyinventoryTest< ApplicationSystemTestCase
         assert_selector "td" ,text: "seller"
         assert_selector "td" ,text: "25.5"
         assert_selector "td", text: "20"
+        assert_selector "img[src*='second.jpg']"
       end
       test "delete" do
         click_on "Go To Inventory"
         select(113629430,from:'market3')
         click_on "Delete"
         assert_selector "p",text:"Delete Succesfully"
+        assert_no_selector "td" ,text: @market3.id
+        assert_no_selector "td" ,text: @market3.item.name
+        assert_no_selector "td" ,text: @market3.item.category
+        assert_no_selector "td" ,text: @market3.price.to_i
+        assert_no_selector "td", text: @market3.stock
+
+        click_on "Back To Main"
+        click_on "Log Out"
+        
+        fill_in "email", with: @buyer.email
+        fill_in "password", with: "123"
+        click_on "OK"
+
+        click_on "Go To Market"
         assert_no_selector "td" ,text: @market3.id
         assert_no_selector "td" ,text: @market3.item.name
         assert_no_selector "td" ,text: @market3.item.category
@@ -79,7 +96,7 @@ class MyinventoryTest< ApplicationSystemTestCase
         assert_selector "p", text: "Add Stock"
         fill_in "addStock", with: 10
         click_on "Add"
-        assert_selector "td" ,text: "17"
+        assert_selector "td" ,text: "80"
         assert_selector "p" ,text: "Add Stock Successfully"
       end
       test "reduce stock fail" do
@@ -87,7 +104,7 @@ class MyinventoryTest< ApplicationSystemTestCase
         select(113629430,from:'market2')
         click_on "Reduce Stock"
         assert_selector "p", text: "Reduce Stock"
-        fill_in "reduceStock", with: 10
+        fill_in "reduceStock", with: 90
         click_on "Reduce"
         assert_selector "p" ,text: "Item stock cannot be negative"
       end

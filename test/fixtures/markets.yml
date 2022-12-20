@@ -17,6 +17,6 @@ two:
 three:
   user: two
   item: first
-  price: 6
-  stock: 7
+  price: 5.5
+  stock: 70
   lock_version: 0

@@ -65,7 +65,7 @@ class MymarketTest< ApplicationSystemTestCase
         assert_selector "td" ,text: "item3"
         assert_selector "td" ,text: "z"
         assert_selector "td" ,text: "seller"
-        assert_selector "td" ,text: "6.0"
+        assert_selector "td" ,text: "5.5"
         assert_selector "td", text: "1"
       end
       test "buy failed" do
@@ -74,7 +74,7 @@ class MymarketTest< ApplicationSystemTestCase
         select(113629430,from:'market')
         click_on "Buy"
         assert_selector "p", text: "Buy Item"
-        fill_in "quantity", with: 20
+        fill_in "quantity", with: 90
         click_on "Buy"
         assert_selector "p", text: "Item out of stock"
       end
@@ -120,7 +120,7 @@ class MymarketTest< ApplicationSystemTestCase
         assert_selector "td" ,text: "item3"
         assert_selector "td" ,text: "z"
         assert_selector "td" ,text: "buyer"
-        assert_selector "td" ,text: "6.0"
+        assert_selector "td" ,text: "5.5"
         assert_selector "td", text: "1"
 
         assert_selector "p", text: "Sale History"
