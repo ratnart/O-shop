@@ -58,6 +58,11 @@ class MymarketTest< ApplicationSystemTestCase
         fill_in "quantity", with: 1
         click_on "Buy"
         assert_selector "p", text: "Purchase Successfully"
+        assert_selector "td" ,text: "item3"
+        assert_selector "td" ,text: "z"
+        assert_selector "td" ,text: "seller"
+        assert_selector "td" ,text: "5.5"
+        assert_selector "td", text: "69"
         click_on "Back To Main"
         click_on "Go To Purchase History"
         assert_selector "p", text: "Purchase History"
